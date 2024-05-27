@@ -25,7 +25,7 @@ export default function App() {
       <Logo />
       <Form onAddItems={handleAddItems} />
       <PackingList items={items} onDeleteItem={handleDeleteItem} onToggleItem={handleTogleItem} />
-      <Stats />
+      <Stats items={items} />
     </div>
   )
 }
@@ -106,11 +106,24 @@ function Item({ item, onDeleteItem, onToggleItem }) {
   )
 }
 
-function Stats() {
+function Stats({ items }) {
+  if (!items.length) return (
+    <p className="stats">
+      <em>
+        Start adding some items to yourpacking list
+      </em>
+    </p>
+  )
+  const numItems = items.length
+  const numPacked = items.filter(item => item.packed).length
+  const pourcentage = Math.round((numPacked / numItems) * 100)
   return (
     <footer className="stats">
       <em>
-        🧳 You have X items on your list, and you already packed X (X%)
+        {pourcentage === 100 ? 'Vous avez compris, Pret a partit ✈ ' :
+          `🧳 You have ${numItems} items on your list, and you already packed
+        ${numPacked} (${pourcentage} %)`
+        }
       </em>
     </footer>
   )
